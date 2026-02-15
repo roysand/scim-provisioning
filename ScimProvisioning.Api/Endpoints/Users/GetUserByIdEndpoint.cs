@@ -32,11 +32,8 @@ public class GetUserByIdEndpoint : Endpoint<GetUserByIdRequest, ApiResponse<User
 
         if (result.IsFailure)
         {
-            ThrowError(r =>
-            {
-                r.StatusCode = 404;
-                r.Message = result.Error;
-            });
+            ThrowError(result.Error);
+            return;
         }
 
         var response = new ApiResponse<UserResponse>(result.Value, "User retrieved successfully");

@@ -33,11 +33,8 @@ public class CreateGroupEndpoint : Endpoint<CreateGroupRequest, ApiResponse<Grou
 
         if (result.IsFailure)
         {
-            ThrowError(r =>
-            {
-                r.StatusCode = 400;
-                r.Message = result.Error;
-            });
+            ThrowError(result.Error);
+            return;
         }
 
         var response = new ApiResponse<GroupResponse>(result.Value, "Group created successfully");
@@ -76,11 +73,8 @@ public class GetGroupByIdEndpoint : Endpoint<GetGroupByIdRequest, ApiResponse<Gr
 
         if (result.IsFailure)
         {
-            ThrowError(r =>
-            {
-                r.StatusCode = 404;
-                r.Message = result.Error;
-            });
+            ThrowError(result.Error);
+            return;
         }
 
         var response = new ApiResponse<GroupResponse>(result.Value, "Group retrieved successfully");

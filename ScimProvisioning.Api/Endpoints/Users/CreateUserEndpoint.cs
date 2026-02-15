@@ -33,11 +33,8 @@ public class CreateUserEndpoint : Endpoint<CreateUserRequest, ApiResponse<UserRe
 
         if (result.IsFailure)
         {
-            ThrowError(r =>
-            {
-                r.StatusCode = 400;
-                r.Message = result.Error;
-            });
+            ThrowError(result.Error);
+            return;
         }
 
         var response = new ApiResponse<UserResponse>(result.Value, "User created successfully");

@@ -13,7 +13,7 @@ public class ApiResponse<T>
     /// <summary>
     /// The response data
     /// </summary>
-    public T Data { get; set; }
+    public T? Data { get; set; }
 
     /// <summary>
     /// Success message

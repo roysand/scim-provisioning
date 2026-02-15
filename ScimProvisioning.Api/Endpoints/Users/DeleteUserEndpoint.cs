@@ -32,11 +32,8 @@ public class DeleteUserEndpoint : Endpoint<DeleteUserRequest, ApiResponse<string
 
         if (result.IsFailure)
         {
-            ThrowError(r =>
-            {
-                r.StatusCode = 404;
-                r.Message = result.Error;
-            });
+            ThrowError(result.Error);
+            return;
         }
 
         var response = new ApiResponse<string>("", "User deleted successfully");

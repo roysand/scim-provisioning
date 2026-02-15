@@ -40,11 +40,8 @@ public class UpdateUserEndpoint : Endpoint<UpdateUserEndpointRequest, ApiRespons
 
         if (result.IsFailure)
         {
-            ThrowError(r =>
-            {
-                r.StatusCode = result.Error.Contains("not found") ? 404 : 400;
-                r.Message = result.Error;
-            });
+            ThrowError(result.Error);
+            return;
         }
 
         var response = new ApiResponse<UserResponse>(result.Value, "User updated successfully");
