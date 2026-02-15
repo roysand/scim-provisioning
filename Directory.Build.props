@@ -2,7 +2,10 @@
   <!-- Common build properties for all projects -->
   
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <!-- Note: TargetFramework is set per-project to allow flexibility -->
+    <!-- API, Sample, Tests: net10.0 -->
+    <!-- Azure Functions: net8.0 -->
+    <!-- Shared Libraries: net8.0;net10.0 (multi-target) -->
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>

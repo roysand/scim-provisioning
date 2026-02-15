@@ -1,0 +1,20 @@
+﻿  Determining projects to restore...
+C:\shared\repo\private\testing\AI\scim-provisioning\ScimProvisioning.AzureFunction\ScimProvisioning.AzureFunction.csproj : warning NU1603: ScimProvisioning.AzureFunction depends on Microsoft.Azure.Functions.Worker.Sdk (>= 1.24.0) but Microsoft.Azure.Functions.Worker.Sdk 1.24.0 was not found. Microsoft.Azure.Functions.Worker.Sdk 2.0.0 was resolved instead. [C:\shared\repo\private\testing\AI\scim-provisioning\ScimProvisioning.slnx]
+  All projects are up-to-date for restore.
+C:\Users\roy.SANDDATA\.nuget\packages\microsoft.azure.functions.worker.sdk\2.0.0\build\Microsoft.Azure.Functions.Worker.Sdk.targets(78,5): error : Invalid combination of TargetFramework and AzureFunctionsVersion is set. [C:\shared\repo\private\testing\AI\scim-provisioning\ScimProvisioning.AzureFunction\ScimProvisioning.AzureFunction.csproj]
+  ScimProvisioning.Core -> C:\shared\repo\private\testing\AI\scim-provisioning\ScimProvisioning.Core\bin\Debug\net10.0\ScimProvisioning.Core.dll
+  ScimProvisioning.Tests -> C:\shared\repo\private\testing\AI\scim-provisioning\ScimProvisioning.Tests\bin\Debug\net10.0\ScimProvisioning.Tests.dll
+  ScimProvisioning.Application -> C:\shared\repo\private\testing\AI\scim-provisioning\ScimProvisioning.Application\bin\Debug\net10.0\ScimProvisioning.Application.dll
+  ScimProvisioning.Infrastructure -> C:\shared\repo\private\testing\AI\scim-provisioning\ScimProvisioning.Infrastructure\bin\Debug\net10.0\ScimProvisioning.Infrastructure.dll
+  ScimProvisioning.Library -> C:\shared\repo\private\testing\AI\scim-provisioning\ScimProvisioning.Library\bin\Debug\net10.0\ScimProvisioning.Library.dll
+  ScimProvisioning.Sample -> C:\shared\repo\private\testing\AI\scim-provisioning\ScimProvisioning.Sample\bin\Debug\net10.0\ScimProvisioning.Sample.dll
+  ScimProvisioning.Api -> C:\shared\repo\private\testing\AI\scim-provisioning\ScimProvisioning.Api\bin\Debug\net10.0\ScimProvisioning.Api.dll
+
+Build FAILED.
+
+C:\shared\repo\private\testing\AI\scim-provisioning\ScimProvisioning.AzureFunction\ScimProvisioning.AzureFunction.csproj : warning NU1603: ScimProvisioning.AzureFunction depends on Microsoft.Azure.Functions.Worker.Sdk (>= 1.24.0) but Microsoft.Azure.Functions.Worker.Sdk 1.24.0 was not found. Microsoft.Azure.Functions.Worker.Sdk 2.0.0 was resolved instead. [C:\shared\repo\private\testing\AI\scim-provisioning\ScimProvisioning.slnx]
+C:\Users\roy.SANDDATA\.nuget\packages\microsoft.azure.functions.worker.sdk\2.0.0\build\Microsoft.Azure.Functions.Worker.Sdk.targets(78,5): error : Invalid combination of TargetFramework and AzureFunctionsVersion is set. [C:\shared\repo\private\testing\AI\scim-provisioning\ScimProvisioning.AzureFunction\ScimProvisioning.AzureFunction.csproj]
+    1 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:02.61
