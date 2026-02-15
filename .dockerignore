@@ -1,0 +1,41 @@
+# ScimProvisioning.Api/.dockerignore
+
+# Ignore build outputs
+**/bin/
+**/obj/
+**/out/
+
+# Ignore user-specific files
+**/*.user
+**/*.userosscache
+**/*.suo
+.vs/
+.vscode/
+
+# Ignore test results
+**/TestResults/
+**/*.trx
+
+# Ignore NuGet packages
+**/packages/
+**/*.nupkg
+
+# Ignore logs
+**/*.log
+
+# Ignore local settings
+**/local.settings.json
+**/appsettings.Development.json
+
+# Git files
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+**/README.md
+**/LICENSE
+
+# Temporary files
+**/tmp/
+**/*.tmp
