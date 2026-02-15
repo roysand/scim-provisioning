@@ -7,7 +7,7 @@ namespace ScimProvisioning.Api.Endpoints.Users;
 /// <summary>
 /// Endpoint for updating a SCIM user
 /// </summary>
-public class UpdateUserEndpoint : Endpoint<UpdateUserEndpointRequest, UserResponse>
+public class UpdateUserEndpoint : Endpoint<UpdateUserEndpointRequest, ApiResponse<UserResponse>>
 {
     private readonly UpdateUserUseCase _useCase;
 
@@ -21,9 +21,9 @@ public class UpdateUserEndpoint : Endpoint<UpdateUserEndpointRequest, UserRespon
         Patch("/scim/v2/Users/{id}");
         AllowAnonymous();
         Description(d => d
-            .Produces<UserResponse>(200)
-            .Produces(400)
-            .Produces(404)
+            .Produces<ApiResponse<UserResponse>>(200)
+            .Produces<ApiErrorResponse>(400)
+            .Produces<ApiErrorResponse>(404)
             .WithTags("Users"));
     }
 
@@ -40,17 +40,15 @@ public class UpdateUserEndpoint : Endpoint<UpdateUserEndpointRequest, UserRespon
 
         if (result.IsFailure)
         {
-            if (result.Error.Contains("not found"))
-                await SendNotFoundAsync(ct);
-            else
+            ThrowError(r =>
             {
-                await SendErrorsAsync(400, ct);
-                AddError(result.Error);
-            }
-            return;
+                r.StatusCode = result.Error.Contains("not found") ? 404 : 400;
+                r.Message = result.Error;
+            });
         }
 
-        await SendOkAsync(result.Value, ct);
+        var response = new ApiResponse<UserResponse>(result.Value, "User updated successfully");
+        await SendOkAsync(response, ct);
     }
 }
 

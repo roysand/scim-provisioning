@@ -7,7 +7,7 @@ namespace ScimProvisioning.Api.Endpoints.Users;
 /// <summary>
 /// Endpoint for listing SCIM users
 /// </summary>
-public class ListUsersEndpoint : Endpoint<ListUsersRequest, ListUsersResponse>
+public class ListUsersEndpoint : Endpoint<ListUsersRequest, ApiPagedResponse<UserResponse>>
 {
     private readonly ListUsersUseCase _useCase;
 
@@ -21,7 +21,7 @@ public class ListUsersEndpoint : Endpoint<ListUsersRequest, ListUsersResponse>
         Get("/scim/v2/Users");
         AllowAnonymous();
         Description(d => d
-            .Produces<ListUsersResponse>(200)
+            .Produces<ApiPagedResponse<UserResponse>>(200)
             .WithTags("Users"));
     }
 
@@ -33,7 +33,15 @@ public class ListUsersEndpoint : Endpoint<ListUsersRequest, ListUsersResponse>
             req.Filter,
             ct);
 
-        await SendOkAsync(result.Value, ct);
+        var listResponse = result.Value;
+        var response = new ApiPagedResponse<UserResponse>(
+            listResponse.Resources,
+            listResponse.TotalResults,
+            listResponse.StartIndex,
+            listResponse.ItemsPerPage,
+            "Users retrieved successfully");
+
+        await SendOkAsync(response, ct);
     }
 }
 

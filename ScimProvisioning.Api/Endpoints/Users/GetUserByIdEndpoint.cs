@@ -7,7 +7,7 @@ namespace ScimProvisioning.Api.Endpoints.Users;
 /// <summary>
 /// Endpoint for getting a SCIM user by ID
 /// </summary>
-public class GetUserByIdEndpoint : Endpoint<GetUserByIdRequest, UserResponse>
+public class GetUserByIdEndpoint : Endpoint<GetUserByIdRequest, ApiResponse<UserResponse>>
 {
     private readonly GetUserByIdUseCase _useCase;
 
@@ -21,8 +21,8 @@ public class GetUserByIdEndpoint : Endpoint<GetUserByIdRequest, UserResponse>
         Get("/scim/v2/Users/{id}");
         AllowAnonymous();
         Description(d => d
-            .Produces<UserResponse>(200)
-            .Produces(404)
+            .Produces<ApiResponse<UserResponse>>(200)
+            .Produces<ApiErrorResponse>(404)
             .WithTags("Users"));
     }
 
@@ -32,11 +32,15 @@ public class GetUserByIdEndpoint : Endpoint<GetUserByIdRequest, UserResponse>
 
         if (result.IsFailure)
         {
-            await SendNotFoundAsync(ct);
-            return;
+            ThrowError(r =>
+            {
+                r.StatusCode = 404;
+                r.Message = result.Error;
+            });
         }
 
-        await SendOkAsync(result.Value, ct);
+        var response = new ApiResponse<UserResponse>(result.Value, "User retrieved successfully");
+        await SendOkAsync(response, ct);
     }
 }
 

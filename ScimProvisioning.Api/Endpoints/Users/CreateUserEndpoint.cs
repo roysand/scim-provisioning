@@ -7,7 +7,7 @@ namespace ScimProvisioning.Api.Endpoints.Users;
 /// <summary>
 /// Endpoint for creating a SCIM user
 /// </summary>
-public class CreateUserEndpoint : Endpoint<CreateUserRequest, UserResponse>
+public class CreateUserEndpoint : Endpoint<CreateUserRequest, ApiResponse<UserResponse>>
 {
     private readonly CreateUserUseCase _useCase;
 
@@ -21,9 +21,9 @@ public class CreateUserEndpoint : Endpoint<CreateUserRequest, UserResponse>
         Post("/scim/v2/Users");
         AllowAnonymous();
         Description(d => d
-            .Produces<UserResponse>(201)
-            .Produces(400)
-            .Produces(409)
+            .Produces<ApiResponse<UserResponse>>(201)
+            .Produces<ApiErrorResponse>(400)
+            .Produces<ApiErrorResponse>(409)
             .WithTags("Users"));
     }
 
@@ -33,14 +33,17 @@ public class CreateUserEndpoint : Endpoint<CreateUserRequest, UserResponse>
 
         if (result.IsFailure)
         {
-            await SendErrorsAsync(400, ct);
-            AddError(result.Error);
-            return;
+            ThrowError(r =>
+            {
+                r.StatusCode = 400;
+                r.Message = result.Error;
+            });
         }
 
+        var response = new ApiResponse<UserResponse>(result.Value, "User created successfully");
         await SendCreatedAtAsync<GetUserByIdEndpoint>(
             new { id = result.Value.Id },
-            result.Value,
+            response,
             cancellation: ct);
     }
 }
