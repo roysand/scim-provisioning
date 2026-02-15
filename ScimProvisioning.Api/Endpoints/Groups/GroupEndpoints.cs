@@ -1,0 +1,127 @@
+using FastEndpoints;
+using ScimProvisioning.Application.DTOs;
+using ScimProvisioning.Application.UseCases.Groups;
+
+namespace ScimProvisioning.Api.Endpoints.Groups;
+
+/// <summary>
+/// Endpoint for creating a SCIM group
+/// </summary>
+public class CreateGroupEndpoint : Endpoint<CreateGroupRequest, GroupResponse>
+{
+    private readonly CreateGroupUseCase _useCase;
+
+    public CreateGroupEndpoint(CreateGroupUseCase useCase)
+    {
+        _useCase = useCase;
+    }
+
+    public override void Configure()
+    {
+        Post("/scim/v2/Groups");
+        AllowAnonymous();
+        Description(d => d
+            .Produces<GroupResponse>(201)
+            .Produces(400)
+            .Produces(409)
+            .WithTags("Groups"));
+    }
+
+    public override async Task HandleAsync(CreateGroupRequest req, CancellationToken ct)
+    {
+        var result = await _useCase.ExecuteAsync(req, ct);
+
+        if (result.IsFailure)
+        {
+            await SendErrorsAsync(400, ct);
+            AddError(result.Error);
+            return;
+        }
+
+        await SendCreatedAtAsync<GetGroupByIdEndpoint>(
+            new { id = result.Value.Id },
+            result.Value,
+            cancellation: ct);
+    }
+}
+
+/// <summary>
+/// Endpoint for getting a SCIM group by ID
+/// </summary>
+public class GetGroupByIdEndpoint : Endpoint<GetGroupByIdRequest, GroupResponse>
+{
+    private readonly GetGroupByIdUseCase _useCase;
+
+    public GetGroupByIdEndpoint(GetGroupByIdUseCase useCase)
+    {
+        _useCase = useCase;
+    }
+
+    public override void Configure()
+    {
+        Get("/scim/v2/Groups/{id}");
+        AllowAnonymous();
+        Description(d => d
+            .Produces<GroupResponse>(200)
+            .Produces(404)
+            .WithTags("Groups"));
+    }
+
+    public override async Task HandleAsync(GetGroupByIdRequest req, CancellationToken ct)
+    {
+        var result = await _useCase.ExecuteAsync(req.Id, ct);
+
+        if (result.IsFailure)
+        {
+            await SendNotFoundAsync(ct);
+            return;
+        }
+
+        await SendOkAsync(result.Value, ct);
+    }
+}
+
+/// <summary>
+/// Endpoint for listing SCIM groups
+/// </summary>
+public class ListGroupsEndpoint : Endpoint<ListGroupsRequest, ListGroupsResponse>
+{
+    private readonly ListGroupsUseCase _useCase;
+
+    public ListGroupsEndpoint(ListGroupsUseCase useCase)
+    {
+        _useCase = useCase;
+    }
+
+    public override void Configure()
+    {
+        Get("/scim/v2/Groups");
+        AllowAnonymous();
+        Description(d => d
+            .Produces<ListGroupsResponse>(200)
+            .WithTags("Groups"));
+    }
+
+    public override async Task HandleAsync(ListGroupsRequest req, CancellationToken ct)
+    {
+        var result = await _useCase.ExecuteAsync(
+            req.StartIndex,
+            req.Count,
+            req.Filter,
+            ct);
+
+        await SendOkAsync(result.Value, ct);
+    }
+}
+
+public class GetGroupByIdRequest
+{
+    public Guid Id { get; set; }
+}
+
+public class ListGroupsRequest
+{
+    public int StartIndex { get; set; } = 0;
+    public int Count { get; set; } = 100;
+    public string? Filter { get; set; }
+}

@@ -7,8 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FastEndpoints" Version="5.31.0" />
+    <PackageReference Include="FastEndpoints.Swagger" Version="5.31.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.23" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ScimProvisioning.Application\ScimProvisioning.Application.csproj" />
+    <ProjectReference Include="..\ScimProvisioning.Infrastructure\ScimProvisioning.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
