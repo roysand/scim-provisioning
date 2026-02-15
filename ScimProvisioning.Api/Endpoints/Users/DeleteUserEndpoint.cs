@@ -1,4 +1,5 @@
 using FastEndpoints;
+using ScimProvisioning.Application.DTOs;
 using ScimProvisioning.Application.UseCases.Users;
 
 namespace ScimProvisioning.Api.Endpoints.Users;
@@ -6,7 +7,7 @@ namespace ScimProvisioning.Api.Endpoints.Users;
 /// <summary>
 /// Endpoint for deleting a SCIM user
 /// </summary>
-public class DeleteUserEndpoint : Endpoint<DeleteUserRequest>
+public class DeleteUserEndpoint : Endpoint<DeleteUserRequest, ApiResponse<string>>
 {
     private readonly DeleteUserUseCase _useCase;
 
@@ -20,8 +21,8 @@ public class DeleteUserEndpoint : Endpoint<DeleteUserRequest>
         Delete("/scim/v2/Users/{id}");
         AllowAnonymous();
         Description(d => d
-            .Produces(204)
-            .Produces(404)
+            .Produces<ApiResponse<string>>(200)
+            .Produces<ApiErrorResponse>(404)
             .WithTags("Users"));
     }
 
@@ -31,11 +32,12 @@ public class DeleteUserEndpoint : Endpoint<DeleteUserRequest>
 
         if (result.IsFailure)
         {
-            await SendNotFoundAsync(ct);
+            ThrowError(result.Error);
             return;
         }
 
-        await SendNoContentAsync(ct);
+        var response = new ApiResponse<string>("", "User deleted successfully");
+        await SendOkAsync(response, ct);
     }
 }
 

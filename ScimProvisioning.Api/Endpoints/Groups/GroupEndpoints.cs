@@ -7,7 +7,7 @@ namespace ScimProvisioning.Api.Endpoints.Groups;
 /// <summary>
 /// Endpoint for creating a SCIM group
 /// </summary>
-public class CreateGroupEndpoint : Endpoint<CreateGroupRequest, GroupResponse>
+public class CreateGroupEndpoint : Endpoint<CreateGroupRequest, ApiResponse<GroupResponse>>
 {
     private readonly CreateGroupUseCase _useCase;
 
@@ -21,9 +21,9 @@ public class CreateGroupEndpoint : Endpoint<CreateGroupRequest, GroupResponse>
         Post("/scim/v2/Groups");
         AllowAnonymous();
         Description(d => d
-            .Produces<GroupResponse>(201)
-            .Produces(400)
-            .Produces(409)
+            .Produces<ApiResponse<GroupResponse>>(201)
+            .Produces<ApiErrorResponse>(400)
+            .Produces<ApiErrorResponse>(409)
             .WithTags("Groups"));
     }
 
@@ -33,14 +33,14 @@ public class CreateGroupEndpoint : Endpoint<CreateGroupRequest, GroupResponse>
 
         if (result.IsFailure)
         {
-            await SendErrorsAsync(400, ct);
-            AddError(result.Error);
+            ThrowError(result.Error);
             return;
         }
 
+        var response = new ApiResponse<GroupResponse>(result.Value, "Group created successfully");
         await SendCreatedAtAsync<GetGroupByIdEndpoint>(
             new { id = result.Value.Id },
-            result.Value,
+            response,
             cancellation: ct);
     }
 }
@@ -48,7 +48,7 @@ public class CreateGroupEndpoint : Endpoint<CreateGroupRequest, GroupResponse>
 /// <summary>
 /// Endpoint for getting a SCIM group by ID
 /// </summary>
-public class GetGroupByIdEndpoint : Endpoint<GetGroupByIdRequest, GroupResponse>
+public class GetGroupByIdEndpoint : Endpoint<GetGroupByIdRequest, ApiResponse<GroupResponse>>
 {
     private readonly GetGroupByIdUseCase _useCase;
 
@@ -62,8 +62,8 @@ public class GetGroupByIdEndpoint : Endpoint<GetGroupByIdRequest, GroupResponse>
         Get("/scim/v2/Groups/{id}");
         AllowAnonymous();
         Description(d => d
-            .Produces<GroupResponse>(200)
-            .Produces(404)
+            .Produces<ApiResponse<GroupResponse>>(200)
+            .Produces<ApiErrorResponse>(404)
             .WithTags("Groups"));
     }
 
@@ -73,18 +73,19 @@ public class GetGroupByIdEndpoint : Endpoint<GetGroupByIdRequest, GroupResponse>
 
         if (result.IsFailure)
         {
-            await SendNotFoundAsync(ct);
+            ThrowError(result.Error);
             return;
         }
 
-        await SendOkAsync(result.Value, ct);
+        var response = new ApiResponse<GroupResponse>(result.Value, "Group retrieved successfully");
+        await SendOkAsync(response, ct);
     }
 }
 
 /// <summary>
 /// Endpoint for listing SCIM groups
 /// </summary>
-public class ListGroupsEndpoint : Endpoint<ListGroupsRequest, ListGroupsResponse>
+public class ListGroupsEndpoint : Endpoint<ListGroupsRequest, ApiPagedResponse<GroupResponse>>
 {
     private readonly ListGroupsUseCase _useCase;
 
@@ -98,7 +99,7 @@ public class ListGroupsEndpoint : Endpoint<ListGroupsRequest, ListGroupsResponse
         Get("/scim/v2/Groups");
         AllowAnonymous();
         Description(d => d
-            .Produces<ListGroupsResponse>(200)
+            .Produces<ApiPagedResponse<GroupResponse>>(200)
             .WithTags("Groups"));
     }
 
@@ -110,7 +111,15 @@ public class ListGroupsEndpoint : Endpoint<ListGroupsRequest, ListGroupsResponse
             req.Filter,
             ct);
 
-        await SendOkAsync(result.Value, ct);
+        var listResponse = result.Value;
+        var response = new ApiPagedResponse<GroupResponse>(
+            listResponse.Resources,
+            listResponse.TotalResults,
+            listResponse.StartIndex,
+            listResponse.ItemsPerPage,
+            "Groups retrieved successfully");
+
+        await SendOkAsync(response, ct);
     }
 }
 

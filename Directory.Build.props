@@ -1,0 +1,43 @@
+<Project>
+  <!-- Common build properties for all projects -->
+  
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <!-- Common assembly information -->
+  <PropertyGroup>
+    <Company>SCIM Provisioning</Company>
+    <Product>SCIM Provisioning API</Product>
+    <Description>SCIM 2.0 Protocol Implementation for User and Group Provisioning</Description>
+    <Authors>Development Team</Authors>
+    <RepositoryUrl>https://github.com/your-org/scim-provisioning</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <License>MIT</License>
+  </PropertyGroup>
+
+  <!-- Version Management -->
+  <PropertyGroup>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <InformationalVersion>1.0.0</InformationalVersion>
+  </PropertyGroup>
+
+  <!-- Analyzer Settings -->
+  <PropertyGroup>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+
+  <!-- Enable centralized package version management -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+</Project>
+
