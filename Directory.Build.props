@@ -9,11 +9,8 @@
 
   <!-- Centralized Target Framework Configuration -->
   <PropertyGroup>
-    <!-- Default: Single target .NET 10.0 for executable projects -->
-    <TargetFramework Condition="'$(TargetFramework)' == '' AND ('$(MSBuildProjectName)' == 'ScimProvisioning.Api' OR '$(MSBuildProjectName)' == 'ScimProvisioning.AzureFunction' OR '$(MSBuildProjectName)' == 'ScimProvisioning.Sample' OR '$(MSBuildProjectName)' == 'ScimProvisioning.Tests')">net10.0</TargetFramework>
-    
-    <!-- Multi-target for shared libraries to support both .NET 8 and .NET 10 -->
-    <TargetFrameworks Condition="'$(TargetFrameworks)' == '' AND ('$(MSBuildProjectName)' == 'ScimProvisioning.Core' OR '$(MSBuildProjectName)' == 'ScimProvisioning.Application' OR '$(MSBuildProjectName)' == 'ScimProvisioning.Infrastructure' OR '$(MSBuildProjectName)' == 'ScimProvisioning.Library')">net8.0;net10.0</TargetFrameworks>
+    <!-- Default: Single target .NET 10.0 for all projects -->
+    <TargetFramework Condition="'$(TargetFramework)' == ''">net10.0</TargetFramework>
   </PropertyGroup>
 
   <!-- Common assembly information -->
