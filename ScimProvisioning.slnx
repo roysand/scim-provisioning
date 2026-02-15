@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="ScimProvisioning.Api/ScimProvisioning.Api.csproj" />
+  <Project Path="ScimProvisioning.Application/ScimProvisioning.Application.csproj" />
+  <Project Path="ScimProvisioning.AzureFunction/ScimProvisioning.AzureFunction.csproj" />
+  <Project Path="ScimProvisioning.Core/ScimProvisioning.Core.csproj" />
+  <Project Path="ScimProvisioning.Infrastructure/ScimProvisioning.Infrastructure.csproj" />
+  <Project Path="ScimProvisioning.Library/ScimProvisioning.Library.csproj" />
+  <Project Path="ScimProvisioning.Sample/ScimProvisioning.Sample.csproj" />
+  <Project Path="ScimProvisioning.Tests/ScimProvisioning.Tests.csproj" />
+</Solution>
