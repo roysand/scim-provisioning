@@ -2,13 +2,18 @@
   <!-- Common build properties for all projects -->
   
   <PropertyGroup>
-    <!-- Note: TargetFramework is set per-project to allow flexibility -->
-    <!-- API, Sample, Tests: net10.0 -->
-    <!-- Azure Functions: net8.0 -->
-    <!-- Shared Libraries: net8.0;net10.0 (multi-target) -->
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <!-- Centralized Target Framework Configuration -->
+  <PropertyGroup>
+    <!-- Default: Single target .NET 10.0 for executable projects -->
+    <TargetFramework Condition="'$(TargetFramework)' == '' AND ('$(MSBuildProjectName)' == 'ScimProvisioning.Api' OR '$(MSBuildProjectName)' == 'ScimProvisioning.AzureFunction' OR '$(MSBuildProjectName)' == 'ScimProvisioning.Sample' OR '$(MSBuildProjectName)' == 'ScimProvisioning.Tests')">net10.0</TargetFramework>
+    
+    <!-- Multi-target for shared libraries to support both .NET 8 and .NET 10 -->
+    <TargetFrameworks Condition="'$(TargetFrameworks)' == '' AND ('$(MSBuildProjectName)' == 'ScimProvisioning.Core' OR '$(MSBuildProjectName)' == 'ScimProvisioning.Application' OR '$(MSBuildProjectName)' == 'ScimProvisioning.Infrastructure' OR '$(MSBuildProjectName)' == 'ScimProvisioning.Library')">net8.0;net10.0</TargetFrameworks>
   </PropertyGroup>
 
   <!-- Common assembly information -->
